@@ -123,5 +123,5 @@ console.log(manage.getAverageMarkResult("Дима"));
 console.log(manage.getAverageMarkResult("Вася"));
 manage.getAverageMarkStudents();
 manage.sortStudent();
-manage.getAverageMarkStudent()
+manage.getAverageMarkStudent();
 
