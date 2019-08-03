@@ -13,37 +13,34 @@ var student5 = creatStudent("Алексей", 25);
 var students = [student1, student2, student3, student4, student5];
 
 //2)Реализовать функцию которая будет управлять студентами
-function manageStudent(name, age){
+function manageStudent(arrStudent){
   var studentArr = students.slice();
-  var student = {
-    name: name,
-    age: age, 
-    marks: []
-  };
 
    //Добавление студента
-  manageStudent.addStudent = function(obj){
+  manageStudent.addStudent = function(name, age){
+    var obj = {
+      name: name,
+      age: age,
+      marks: []
+    };
     studentArr.push(obj);
     return studentArr;
   };
 
   //Удаление студента
   manageStudent.removeStudent = function(name) {
-    //var student = studentArr.find(t => t.name === name);
-    var student = studentArr.find(function(student){
+    var indexStudent = studentArr.findIndex(function(student){
       return student.name === name;
     });
-    var index = studentArr.indexOf(student);
-    studentArr.splice(index, 1);
+    studentArr.splice(indexStudent, 1);
   };
 
 //Добавление оценки
   manageStudent.addMarks = function(name, marks, numberLesson){
-    for (var i = 0; i < studentArr.length; i++){
-        if (studentArr[i].name === name){
-          studentArr[i].marks[numberLesson - 1] = marks;
-        }
-    }
+    var student = studentArr.find(function(student){
+      return student.name === name;
+    });
+    student.marks[numberLesson - 1] = marks;
     return "Студент: " + name + ", оценка: " + marks + " , предмет: " + numberLesson;
   };
 
@@ -59,26 +56,21 @@ function manageStudent(name, age){
         return t.name === name;
     });
         if(student){
-          for (var j = 0; j < student.marks.length; j++){
-            sumMarks += student.marks[j];
-          }
-          avg = sumMarks / student.marks.length;
+          avg = student.marks.reduce(function(sum, current){
+            return (sum + current)/2;
+          });
         }
-    
     return avg.toFixed(2);
   };
 
   //Получение средней оценки группы за занятие
   manageStudent.getAverageMarkStudents = function(){
-    var sumMarks = 0;
     var avg = [];
     for (var i = 0; i < studentArr[0].marks.length; i++){
-      sumMarks = 0;
-        for (var j = 0; j < studentArr.length; j++){
-            sumMarks += studentArr[j].marks[i];
-          }
-          avg[i] = sumMarks/studentArr.length;
-          console.log("Номер предмета: " + i + ", Средняя оценка за предмет: " + avg[i]);
+        avg[i] = studentArr.reduce(function(sum, current){
+          return (sum + current.marks[i])/2;
+        }, 0);
+          console.log("Номер предмета: " + i + ", Средняя оценка за предмет: " + avg[i].toFixed(2));
         }
     };
 
@@ -98,15 +90,13 @@ function manageStudent(name, age){
     return studentArr;
   };
 
-  return student;
 }
 
 
 
-var student = manageStudent('Коля', 45);
+manageStudent(students);
 console.log("Добавление студента");
-console.log(student);
-console.log(manageStudent.addStudent(student));
+console.log(manageStudent.addStudent('Коля', 45));
 manageStudent.removeStudent("Алексей");
 console.log(manageStudent.addMarks("Дима", 5, 1));
 console.log(manageStudent.addMarks("Дима", 5, 2));
