@@ -17,12 +17,7 @@ function manageStudent(arrStudent){
   var studentArr = students.slice();
 
    //Добавление студента
-  manageStudent.addStudent = function(name, age){
-    var obj = {
-      name: name,
-      age: age,
-      marks: []
-    };
+  manageStudent.addStudent = function(obj){
     studentArr.push(obj);
     return studentArr;
   };
@@ -46,21 +41,22 @@ function manageStudent(arrStudent){
 
     //Получение средней оценки по имени
   manageStudent.getAverageMarkResult = function(name){
-    return "Средняя оценка " + name + " равна " + getAverageMark(name);
-  };
-
-  //Функция получения средней оценки по имени для сортировки
-  function getAverageMark(name){
-    var sumMarks = 0, avg = 0;
     var student = studentArr.find(function(t){
         return t.name === name;
     });
-        if(student){
-          avg = student.marks.reduce(function(sum, current){
-            return (sum + current)/2;
-          });
-        }
-    return avg.toFixed(2);
+    if(student){
+      var averageMarkResult = getAverageMark(student);
+    }
+    return averageMarkResult;
+
+  };
+
+  //Функция получения средней оценки по имени для сортировки
+  function getAverageMark(student){
+    var avg = student.marks.reduce(function(sum, current){
+          return (sum + current)/2;
+        });
+    return avg;
   };
 
   //Получение средней оценки группы за занятие
@@ -85,18 +81,20 @@ function manageStudent(arrStudent){
   //Получение отсортированного по среднему балу списка студентов
   manageStudent.getAverageMarkStudent = function(){
     studentArr.sort(function(a, b) {
-        return getAverageMark(a.name) > getAverageMark(b.name) ? 1 : -1;
+        return manageStudent.getAverageMarkResult(a.name) > manageStudent.getAverageMarkResult(b.name) ? 1 : -1;
       });
     return studentArr;
   };
 
+  return this;
+
 }
 
 
-
+var student6 = creatStudent("Коля", 45);
 manageStudent(students);
 console.log("Добавление студента");
-console.log(manageStudent.addStudent('Коля', 45));
+console.log(manageStudent.addStudent(student6));
 manageStudent.removeStudent("Алексей");
 console.log(manageStudent.addMarks("Дима", 5, 1));
 console.log(manageStudent.addMarks("Дима", 5, 2));
@@ -113,7 +111,9 @@ console.log(manageStudent.addMarks("Андрей", 3, 3));
 console.log(manageStudent.addMarks("Коля", 3, 1));
 console.log(manageStudent.addMarks("Коля", 5, 2));
 console.log(manageStudent.addMarks("Коля", 3, 3));
+console.log("Средняя оценка студента Димы: ");
 console.log(manageStudent.getAverageMarkResult("Дима"));
+console.log("Средняя оценка студента Васи: ");
 console.log(manageStudent.getAverageMarkResult("Вася"));
 manageStudent.getAverageMarkStudents();
 console.log("Сортировка по именам списка студентов");
