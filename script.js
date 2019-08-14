@@ -53,10 +53,9 @@ function manageStudent(arrStudent){
 
   //Функция получения средней оценки по имени для сортировки
   function getAverageMark(student){
-    var avg = student.marks.reduce(function(sum, current){
+   return student.marks.reduce(function(sum, current){
           return (sum + current)/2;
         });
-    return avg;
   };
 
   //Получение средней оценки группы за занятие
@@ -86,13 +85,13 @@ function manageStudent(arrStudent){
     return studentArr;
   };
 
-  return this;
+  return {this: manageStudent};
 
 }
 
 
 var student6 = creatStudent("Коля", 45);
-manageStudent(students);
+console.log(manageStudent(students));
 console.log("Добавление студента");
 console.log(manageStudent.addStudent(student6));
 manageStudent.removeStudent("Алексей");
